@@ -1,3 +1,13 @@
+"""
+Nom ......... : Exercice 4.3
+Rôle ........ : Décoder le code Brainfuck + chercher date dans Pi + Calcule décimal Pi + video
+Auteur ...... : Darius Pourre
+Version ..... : V1 du chapitre 4
+Licence ..... : L1 informatique 
+Cours ....... : Outils informatiques collaboratifs
+Compilation . : Streamlit
+"""
+
 import streamlit as st
 from mpmath import mp
 from datetime import datetime
@@ -83,57 +93,61 @@ def get_french_birthdate(birthdate):
 def sum_of_decimals(pi_decimals, n):
     return sum(int(digit) for digit in pi_decimals[:n])
 
-# Interface utilisateur Streamlit
-st.title("Interpréteur Brainfuck et Calculs avec Pi")
+def main():
+    # Interface utilisateur Streamlit
+    st.title("Interpréteur Brainfuck et Calculs avec Pi")
 
-# Interpréteur Brainfuck
-st.header("Interpréteur Brainfuck")
-code = st.text_area("Entrez votre code Brainfuck ici:")
-input_data = st.text_input("Entrez les données d'entrée (si nécessaire):")
+    # Interpréteur Brainfuck
+    st.header("Interpréteur Brainfuck")
+    code = st.text_area("Entrez votre code Brainfuck ici:")
+    input_data = st.text_input("Entrez les données d'entrée (si nécessaire):")
 
-if st.button("Exécuter"):
-    try:
-        result, log = brainfuck_interpreter(code, input_data)
-        st.text_area("Sortie:", result, height=200)
-        st.text_area("Logs d'exécution:", "\n".join([f"Code Pointer: {step[0]}, Commande: {step[1]}, Tape Pointer: {step[2]}, Tape Value: {step[3]}" for step in log]), height=400)
-    except Exception as e:
-        st.error(f"Erreur lors de l'exécution du code Brainfuck: {e}")
+    if st.button("Exécuter"):
+        try:
+            result, log = brainfuck_interpreter(code, input_data)
+            st.text_area("Sortie:", result, height=200)
+            st.text_area("Logs d'exécution:", "\n".join([f"Code Pointer: {step[0]}, Commande: {step[1]}, Tape Pointer: {step[2]}, Tape Value: {step[3]}" for step in log]), height=400)
+        except Exception as e:
+            st.error(f"Erreur lors de l'exécution du code Brainfuck: {e}")
 
-# Recherche de date de naissance dans Pi
-st.header("Recherche de Date de Naissance dans Pi")
-birthdate = st.text_input("Entrez votre date de naissance (format JJMMYYYY):")
+    # Recherche de date de naissance dans Pi
+    st.header("Recherche de Date de Naissance dans Pi")
+    birthdate = st.text_input("Entrez votre date de naissance (format JJMMYYYY):")
 
-if st.button("Rechercher dans Pi"):
-    if len(birthdate) == 8 and birthdate.isdigit():
-        pi_decimals = get_pi_decimals()
-        index = find_in_pi(birthdate, pi_decimals)
-        if index != -1:
-            st.success(f"Votre date de naissance se trouve à la position {index} dans les décimales de Pi.")
-        else:
-            st.error("Votre date de naissance ne se trouve pas dans le premier million de décimales de Pi.")
-        
-        # Calculer et afficher le jour de la semaine et la date en français
-        formatted_date = get_french_birthdate(birthdate)
-        if formatted_date:
-            st.write(f"Vous êtes né(e) le {formatted_date}.")
+    if st.button("Rechercher dans Pi"):
+        if len(birthdate) == 8 and birthdate.isdigit():
+            pi_decimals = get_pi_decimals()
+            index = find_in_pi(birthdate, pi_decimals)
+            if index != -1:
+                st.success(f"Votre date de naissance se trouve à la position {index} dans les décimales de Pi.")
+            else:
+                st.error("Votre date de naissance ne se trouve pas dans le premier million de décimales de Pi.")
+            
+            # Calculer et afficher le jour de la semaine et la date en français
+            formatted_date = get_french_birthdate(birthdate)
+            if formatted_date:
+                st.write(f"Vous êtes né(e) le {formatted_date}.")
+            else:
+                st.error("Format de date de naissance invalide. Veuillez entrer une date au format JJMMYYYY.")
         else:
             st.error("Format de date de naissance invalide. Veuillez entrer une date au format JJMMYYYY.")
-    else:
-        st.error("Format de date de naissance invalide. Veuillez entrer une date au format JJMMYYYY.")
 
-# Calculs avec Pi
-st.header("Calculs avec les Décimales de Pi")
-pi_decimals = get_pi_decimals()
+    # Calculs avec Pi
+    st.header("Calculs avec les Décimales de Pi")
+    pi_decimals = get_pi_decimals()
 
-# Calculer la somme des 20 premières décimales de pi
-sum_20 = sum_of_decimals(pi_decimals, 20)
-st.write(f"La somme des 20 premières décimales de pi est : {sum_20}")
+    # Calculer la somme des 20 premières décimales de pi
+    sum_20 = sum_of_decimals(pi_decimals, 20)
+    st.write(f"La somme des 20 premières décimales de pi est : {sum_20}")
 
-# Calculer la somme des 144 premières décimales de pi (12²)
-sum_144 = sum_of_decimals(pi_decimals, 144)
-# Utiliser Unicode pour afficher 12²
-st.write(f"La somme des 12\u00B2 premières décimales de pi est : {sum_144}")
+    # Calculer la somme des 144 premières décimales de pi (12²)
+    sum_144 = sum_of_decimals(pi_decimals, 144)
+    # Utiliser Unicode pour afficher 12²
+    st.write(f"La somme des 12\u00B2 premières décimales de pi est : {sum_144}")
 
-# Ajouter une vidéo expliquant la somme de tous les nombres entiers naturels
-st.header("Vidéo explicative : La somme de tous les nombres entiers naturels est égale à -1/12")
-st.video("https://www.youtube.com/watch?v=w-I6XTVZXww")
+    # Ajouter une vidéo expliquant la somme de tous les nombres entiers naturels
+    st.header("Vidéo explicative : La somme de tous les nombres entiers naturels est égale à -1/12")
+    st.video("https://www.youtube.com/watch?v=w-I6XTVZXww")
+
+if __name__ == "__main__":
+    main()
